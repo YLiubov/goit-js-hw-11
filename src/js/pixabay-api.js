@@ -1,21 +1,24 @@
-export function searchImages(searchWord, myGallery) {
-    const BASE_URL = "https://pixabay.com/api/";
+
+export function searchImages(value) {
+    const BASE_URL = `https://pixabay.com/api/`;
+    const API_KEY = "43313350-287c14b2000f5e13b9dad3a59";
+
     const params = new URLSearchParams({
-        key: '43249627-6464a1b02c37cf8fbedd51288',
-        q: searchWord, // Використовуємо значення змінної searchWord
+        key: API_KEY,
+        q: value,
         image_type: "photo",
         orientation: "horizontal",
-        safesearch: true,
-    });
-
+        safesearch: true
+    })
+        
     return fetch(`${BASE_URL}?${params}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch images');
-            }
-            return response.json();
-        })
-        .catch(error => {
-            throw new Error('Failed to fetch images');
-        });
+    .then(recponse => {
+        if(!recponse.ok) {
+            throw new Error(recponse.statusText)
+        }
+      
+        return recponse.json();
+    } );
 }
+
+       

@@ -1,22 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vanilla App Template</title>
     <link rel="stylesheet" href="./css/styles.css" />
-</head>
-<body>
-    <form class="main_form" action="submit">
-        <input name="inputElement" type="text" class="input_el" placeholder="Search images...">
-        <button class="button_el" type="submit">Search</button>
-    </form>
-    <div class="gallery_box">
-        <ul class="list_gallery"></ul>
-        <div class="loader"></div>
-    </div>
-
+  </head>
+  <body>
+    <section>
+      <form action="submit" class="js-search-form search-form">
+        <div class="form-group">     
+        <input
+          type="text"
+          placeholder="Search images..."
+          name="search-image"
+          class="search-input"
+          autocomplete="off"
+          required
+        />
+        <button class="search-button">Search</button>
+        </div> 
+      </form>
+      <div class="loader"></div>
+        <ul class="js-images-list"></ul>
+    </section>
     <script type="module" src="./main.js"></script>
-</body>
+  </body>
 </html>

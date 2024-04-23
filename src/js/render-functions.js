@@ -1,44 +1,30 @@
+export function createMarcup(arr) {
 
-export function renderGallery(receivedObject) {
-const neccesaryArray = receivedObject.hits;
-return neccesaryArray
-    .map(
-    ({
-        webformatURL,
-        largeImageURL,
-        tags,
-        likes,
-        views,
-        comments,
-        downloads,
-    }) => `
-        <li class="card">
-            <div class="imeges">
-                <a href="${largeImageURL}">
-                    <img src="${webformatURL}" alt="${tags}" class="picture"/>
-                </a>
-            </div>
-            <ul class='descriptions'>
-                <li class='descriptions_item'>
-                    <span>Likes</span>
-                    <span>${likes}</span>
-                </li>
-                <li class='descriptions_item'>
-                    <span>Views</span>
-                    <span>${views}</span>
-                </li>
-                <li class='descriptions_item'>
-                    <span>Comments</span>
-                    <span>${comments}</span>
-                </li>
-                <li class='descriptions_item'>
-                    <span>Downloads</span>
-                    <span>${downloads}</span>
-                </li>
-            </ul>
-        </li>`
-    )
-    .join('');
+return arr.map(({id, webformatURL, largeImageURL, tags, likes, views, comments, downloads}) =>
+    `<li class="images-list-item" data-id='${id}'>
+    <a class="images-list-link" href="${largeImageURL}">
+        <img class="images-list-image" src="${webformatURL}" alt="${tags}"></img>
+    </a>
+    <div class="tumb">
+        <div class="block">
+            <h2 class="tittle">Likes</h2>
+            <p class="text">${likes}</p>
+        </div>
+        <div class="block">
+            <h2 class="tittle">Views</h2>
+            <p class="text">${views}</p>
+        </div>
+        <div class="block">
+            <h2 class="tittle">Comments</h2>
+            <p class="text">${comments}</p>
+        </div>
+        <div class="block">
+            <h2 class="tittle">Downloads</h2>
+            <p class="text">${downloads}</p>
+        </div>
+    </div>
+</li>`
+
+
+).join('')
 }
-
-

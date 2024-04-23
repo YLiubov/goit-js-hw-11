@@ -1,84 +1,74 @@
-import { searchImages } from './js/pixabay-api.js';
-import { renderGallery } from './js/render-functions.js';
+import { createMarcup } from "./js/render-functions";
+import { searchImages } from "./js/pixabay-api";
 
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 
-import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
 
-const book = new SimpleLightbox('.list_gallery a');
+const formEl = document.querySelector(".js-search-form");
+const imagesList = document.querySelector(".js-images-list");
+const loaderEl = document.querySelector(".loader");
 
-const form = document.querySelector('.main_form');
-const myGallery = document.querySelector('.list_gallery');
+const lightbox = new SimpleLightbox('.js-images-list a', {
+  captions: true,
+  captionsData: 'alt',
+  captionDelay: 250,
+});
 
-const loadEl = document.querySelector('.loader');
-const showLoader = () => {
-    loadEl.style.display = 'block';
-};
-const hideLoader = () => {
-    loadEl.style.display = 'none';
-};
-// ювбаь
-
-window.addEventListener('load', hendlerLoad );
-function hendlerLoad() {
-    console.dir(loadEl);
-    setTimeout(() => {
-        loadEl.remove();
-    },300)
-}
+loaderEl.style.display = 'none';
 
 
-form.addEventListener("submit", handlerForm);
+// loaderEl.style.borderColor = 'white';
+// loaderEl.style.borderBottomColor = 'transparent';
 
-function handlerForm(event) {
+formEl.addEventListener('submit', handleSubmit);
+
+ function handleSubmit(event) {
     event.preventDefault();
     
-    myGallery.innerHTML = '';
-    let searchWord = event.currentTarget.elements.inputElement.value;
-    // console.log(event.currentTarget.elements.inputElement.value);
+   
+    
+    loaderEl.style.display = 'block';
+    imagesList.innerHTML = '';
 
-    event.currentTarget.elements.inputElement.value = "";  
-    // console.log(event.currentTarget.elements.inputElement.value);
+  const searchInput = event.currentTarget.querySelector('.search-input').value;
 
-    searchImages(searchWord)
-        .then(data => {
-            if (data.total == 0) {
-                iziToast.show({
-                    title: 'Ops.',
-                    titleColor: 'white',
-                    message:
-                        'Sorry, there are no images matching your search query. Please try again!',
-                    messageColor: 'white',
-                    color: 'red',
-                    position: 'topCenter',
-                    timeout: '5000',
-                });
-                return 0;
-            } else {
-                showLoader();
-                myGallery.insertAdjacentHTML('beforeend', renderGallery(data));
-                book.refresh();
-            }
-        })
-        .catch(error => {
-            iziToast.show({
-                title: 'Ops.',
-                titleColor: 'white',
-                message: error,
-                messageColor: 'white',
-                color: 'red',
-                position: 'topCenter',
-                timeout: '5000',
-            });
-        })
-        .finally(() => { 
-            hideLoader();
-        });
+       searchImages(searchInput)
+       .then(data => {
+      
+        
+        if (!data.hits.length) {
+            iziToast.error({title: 'Error', messege: 'Sorry, there are no images matching your search query. Please try again!',})
+       
+        return data;
+
+    } else {
+      imagesList.insertAdjacentHTML('beforeend', createMarcup(data.hits))
+
+
+        lightbox.refresh();
+       searchInput = '';
+    }
+  })
+      
+   
+
+    .catch(error => {
+      
+     
+      if(error.length != undefined) {
+        iziToast.error({
+            title: 'Error',
+            message:
+              'Sorry, there are no images matching your search query. Please try again!',
+          });
+      }
+      
+    })
+    .finally(() =>{
+     
+      loaderEl.style.display = 'none';
+      })
 }
-
-
-
-
-
